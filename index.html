@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="css/narra.css" />
+    <title>trianarra</title>
+</head>
+
+<body>
+    <header>
+        <div id="title">trianarra</div>
+        <div id="login-to-fb">login</div>
+    </header>
+    <div id="story-desc" class="field">
+        <div id="desc-content">
+            歡迎來到trianarra, 一個故事的創作平台, 可在此發表自己的故事, 或接續他人的故事, 文章將會發表於
+            <a href="https://fb.me/trianarra">粉絲專頁</a> , 請務必遵守
+            <a href="https://www.facebook.com/communitystandards">Facebook社群守則</a> ,
+            發文時我們會記錄您的fbid, 用於識別作者文章使用, 本發文版面嚴禁非文章的發表與抄襲,
+            若發生此現象時將會被列入黑名單中, 未來將無法在此發文, 本版不負任何法律責任。
+            <font style="color: red;">注意, 單篇文章請選擇'開端'。</font>
+        </div>
+    </div>
+    <div id="story-post" class="field">
+        <div id="post-mode">
+            <input id="m1" name="post-mode" type="radio" checked/>
+            <label for="m1">發表文章</label>
+            <input id="m2" name="post-mode" type="radio" />
+            <label for="m2">編輯文章</label>
+            <div id="post-edit">
+                <input id="edit-id" type="text" placeholder="輸入文章id，例：#trianarra0" />
+            </div>
+            <input id="edit-serial" type="hidden" value="" />
+            <input id="edit-fbid" type="hidden" value="" />
+            <input id="edit-uid" type="hidden" value="" />
+        </div>
+        <input id="post-title" type="text" placeholder="輸入標題" /><!--
+        --><input id="post-name" type="text" placeholder="筆名" />
+        <textarea id="post-content" placeholder="輸入內容"></textarea>
+        <div id="post-type">
+            <div style="float: left; font-size: 20px; width: 100px">文章類型:</div>
+            <input id="t1" name="post-type" type="radio" value="開端" checked/>
+            <label for="t1"></label>
+            <input id="t2" name="post-type" type="radio" value="之後" />
+            <label for="t2"></label>
+            <input id="t3" name="post-type" type="radio" value="之前" />
+            <label for="t3"></label>
+            <input id="post-relate" type="text" placeholder="標記文章id，例：#trianarra0" />
+        </div>
+        <textarea id="post-note" placeholder="留下想說的話吧(選填)"></textarea>
+        <div id="post-sent">
+            <div id="post-permission">
+                <input type="checkbox" id="post-solitaire" checked/>
+                <label for="post-solitaire">允許他人接文</label>
+            </div>
+            <button id="cancel">取消</button><!--
+            --><button id="sent">送出</button>
+        </div>
+    </div>
+    <script>
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '202604820284337',
+                cookie: true,
+                xfbml: true,
+                version: 'v2.11'
+            });
+            FB.AppEvents.logPageView();
+        };
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+    <script src="js/cookie.js"></script>
+    <script src="js/fbPost.js"></script>
+    <script src="js/index.js"></script>
+</body>
+
+</html>
