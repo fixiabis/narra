@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/narra.css" />
+    <title>reviewer</title>
+</head>
+
+<body>
+    <header>
+        <div id="title">trianarra</div>
+    </header>
+    <div id="story-desc" class="field">
+        <div id="desc-content">
+            歡迎來到trianarra, 一個故事的創作平台, 可在此進行審查文章，<a href="https://docs.google.com/spreadsheets/d/16Vh11gkwUADUR1H2aCvjilVX946327oA1YElYqxkbOk" target="_blank">點此前往</a>審查文章清單
+        </div>
+    </div>
+    <script>
+        function createField(content) {
+            var div = document.createElement("div");
+            div.className = "field";
+            div.innerHTML = content;
+            document.body.appendChild(div);
+        }
+        function getData(url, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("get", url);
+            xhr.onload = function(){
+                var data = JSON.parse(this.response).data;
+                callback(data);
+            };
+            xhr.send();
+        }
+        function getFbData(){
+            var url = "https://graph.facebook.com/1961795094104661/feed?fields=from,message&limit=10",
+                token = "&access_token=EAAEAhFsvEQIBAFrTHXMYfZBleKjrTUZBZAmyUFyoeraXQxpc7NDZA1fna0ZAHV3PLh1ugec8OLPzgeiAL0FH7vZCoRWfZC1SZCUT9PVX9c10Ldl7PZBECIha4yS3uo9woQAhcVGUQPrn9GRihwp4Urkmmzj9v4CTxIZCbSXx2mDpoO4wZDZD";
+        }
+    </script>
+</body>
+
+</html>
