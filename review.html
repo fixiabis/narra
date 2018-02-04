@@ -7,6 +7,15 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="css/narra.css" />
     <title>reviewer</title>
+    <style>
+        .field {
+            font-size: 20px;
+            padding: 10px;
+        }
+        button {
+            float: right;
+        }
+    </style>
 </head>
 
 <body>
@@ -15,29 +24,65 @@
     </header>
     <div id="story-desc" class="field">
         <div id="desc-content">
-            歡迎來到trianarra, 一個故事的創作平台, 可在此進行審查文章，<a href="https://docs.google.com/spreadsheets/d/16Vh11gkwUADUR1H2aCvjilVX946327oA1YElYqxkbOk" target="_blank">點此前往</a>審查文章清單
+            歡迎來到trianarra, 一個故事的創作平台, 可在此進行審查文章，
+            <a href="https://docs.google.com/spreadsheets/d/16Vh11gkwUADUR1H2aCvjilVX946327oA1YElYqxkbOk"
+                target="_blank">點此前往</a>審查文章清單
         </div>
     </div>
     <script>
-        function createField(content) {
-            var div = document.createElement("div");
-            div.className = "field";
-            div.innerHTML = content;
-            document.body.appendChild(div);
+        function createField(content, id) {
+            if (!content) return;
+            var field = document.createElement("div"),
+                contentContainer = document.createElement("div"),
+                buttonContainer = document.createElement("div"),
+                commentButton = document.createElement("button");
+            field.className = "field";
+            contentContainer.innerHTML = content;
+            commentButton.innerHTML = "前往評論";
+            commentButton.onclick = function() {
+                window.open("https://www.facebook.com/" + id);
+            }
+            buttonContainer.appendChild(commentButton);
+            field.appendChild(contentContainer);
+            field.appendChild(buttonContainer);
+            document.body.appendChild(field);
         }
         function getData(url, callback) {
             var xhr = new XMLHttpRequest();
             xhr.open("get", url);
-            xhr.onload = function(){
-                var data = JSON.parse(this.response).data;
+            xhr.onload = function () {
+                var data = JSON.parse(this.response);
                 callback(data);
             };
             xhr.send();
         }
-        function getFbData(){
+        function getFbData() {
             var url = "https://graph.facebook.com/1961795094104661/feed?fields=from,message&limit=10",
-                token = "&access_token=EAAEAhFsvEQIBAFrTHXMYfZBleKjrTUZBZAmyUFyoeraXQxpc7NDZA1fna0ZAHV3PLh1ugec8OLPzgeiAL0FH7vZCoRWfZC1SZCUT9PVX9c10Ldl7PZBECIha4yS3uo9woQAhcVGUQPrn9GRihwp4Urkmmzj9v4CTxIZCbSXx2mDpoO4wZDZD";
+                token = "&access_token=EAAEAhFsvEQIBAFrTHXMYfZBleKjrTUZBZAmyUFyoeraXQxpc7NDZA1fna0ZAHV3PLh1ugec8OLPzgeiAL0FH7vZCoRWfZC1SZCUT9PVX9c10Ldl7PZBECIha4yS3uo9woQAhcVGUQPrn9GRihwp4Urkmmzj9v4CTxIZCbSXx2mDpoO4wZDZD",
+                ignoreConfirm = function (content, id, comments) {
+                    if (comments) {
+                        for (var i = 0; i < comments.data.length; i++)
+                            if (comments.data[i].search("#已審核") > -1) return;
+                        if (comments.paging && comments.paging.next)
+                            return getData(comments.paging.next, function (data) {
+                                ignoreConfirm(content, id, data);
+                            });
+                    }
+                    return createField(content, id);
+                },
+                fetcher = function (data) {
+                    for (var i = 0; i < data.data.length; i++) {
+                        var d = data.data[i],
+                            id = d.id,
+                            message = d.message,
+                            comments = d.comments;
+                        ignoreConfirm(message, id, comments);
+                    }
+                    if (data.paging && data.paging.next) return getData(data.paging.next, fetcher);
+                };
+            getData(url + token, fetcher);
         }
+        getFbData();
     </script>
 </body>
 
