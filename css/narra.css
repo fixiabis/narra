@@ -3,13 +3,18 @@
     src: url(../font/OpenSans-Light.ttf);
 }
 
+@font-face {
+    font-family: NotoSans;
+    src: url(../font/NotoSansCJKtc-Thin.otf);
+}
+
 a:hover {
     animation: show 1s infinite;
 }
 
 *,
 ::placeholder {
-    font-family: OpenSans-Light, monospace;
+    font-family: OpenSans-Light, NotoSans, monospace;
     color: #111;
 }
 
@@ -23,7 +28,10 @@ html {
 }
 
 body {
-    background: rgb(8, 8, 8);
+    background: -webkit-linear-gradient(bottom right, #DDD, #666);
+    background: -moz-linear-gradient(bottom right, #DDD, #666);
+    background: -o-linear-gradient(bottom right, #DDD, #666);
+    background: linear-gradient(to bottom right, #DDD, #666);
     background-image: url(../t.jpg);
     background-size: cover;
     background-repeat: no-repeat;

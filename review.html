@@ -37,7 +37,7 @@
                 buttonContainer = document.createElement("div"),
                 commentButton = document.createElement("button");
             field.className = "field";
-            contentContainer.innerHTML = content;
+            contentContainer.innerHTML = content.replace(/\n/g, "<br>");
             commentButton.innerHTML = "前往評論";
             commentButton.onclick = function() {
                 window.open("https://www.facebook.com/" + id);
