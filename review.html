@@ -57,12 +57,12 @@
             xhr.send();
         }
         function getFbData() {
-            var url = "https://graph.facebook.com/1961795094104661/feed?fields=from,message&limit=10",
+            var url = "https://graph.facebook.com/1961795094104661/feed?fields=from,message,comments&limit=10",
                 token = "&access_token=EAAEAhFsvEQIBAFrTHXMYfZBleKjrTUZBZAmyUFyoeraXQxpc7NDZA1fna0ZAHV3PLh1ugec8OLPzgeiAL0FH7vZCoRWfZC1SZCUT9PVX9c10Ldl7PZBECIha4yS3uo9woQAhcVGUQPrn9GRihwp4Urkmmzj9v4CTxIZCbSXx2mDpoO4wZDZD",
                 ignoreConfirm = function (content, id, comments) {
                     if (comments) {
                         for (var i = 0; i < comments.data.length; i++)
-                            if (comments.data[i].search("#已審核") > -1) return;
+                            if (comments.data[i].message.search("#已審") == 0) return;
                         if (comments.paging && comments.paging.next)
                             return getData(comments.paging.next, function (data) {
                                 ignoreConfirm(content, id, data);
@@ -76,6 +76,7 @@
                             id = d.id,
                             message = d.message,
                             comments = d.comments;
+                        console.log(d);
                         ignoreConfirm(message, id, comments);
                     }
                     if (data.paging && data.paging.next) return getData(data.paging.next, fetcher);
