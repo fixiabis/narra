@@ -76,7 +76,6 @@
                             id = d.id,
                             message = d.message,
                             comments = d.comments;
-                        console.log(d);
                         ignoreConfirm(message, id, comments);
                     }
                     if (data.paging && data.paging.next) return getData(data.paging.next, fetcher);
