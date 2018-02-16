@@ -7,8 +7,8 @@ var userId = Cookies.get("userId"),
 	postNote = document.querySelector("#article-note"),
 	postRelate = document.querySelector("#article-relate"),
 	postSent = document.querySelector("#article-sent"),
-    postSolitaire = document.querySelector("#article-solitaire"),
-    fbLogIO = document.querySelector("#facebook-logIO"),
+	postSolitaire = document.querySelector("#article-solitaire"),
+	fbLogIO = document.querySelector("#facebook-logIO"),
 	editUid = "",
 	editFbid = "",
 	editSerial = "";
@@ -24,14 +24,16 @@ fbLogIO.onclick = function () {
 			fbLogIO.innerHTML = "Logout the account";
 		});
 	} else {
-		FB.logout(function () {
-			userId = "";
-			Cookies.del("userId");
-			fbLogIO.innerHTML = "Login with Facebook";
-		});
+		Cookies.del("userId");
+		try {
+			FB.logout(function () {
+				userId = "";
+				fbLogIO.innerHTML = "Login with Facebook";
+			});
+		} catch (e) { }
 	}
 };
-document.querySelector("#post-article").onclick = function() {
+document.querySelector("#post-article").onclick = function () {
 	document.querySelector("[data-mode=post-article]").style.display = "";
 }
 document.querySelector("#article-id").oninput = function () {
