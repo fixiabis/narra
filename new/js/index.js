@@ -25,6 +25,8 @@ fbLogIO.onclick = function () {
 		});
 	} else {
 		Cookies.del("userId");
+		Cookies.del("name");
+		clearStory(true);
 		try {
 			FB.logout(function () {
 				userId = "";
