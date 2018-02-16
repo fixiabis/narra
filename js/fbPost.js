@@ -59,11 +59,3 @@ function encode(r) {
 	r = r.replace(/ /g, "%20");
 	return r;
 }
-function getFromFb() {
-	var xhr = new XMLHttpRequest();
-	xhr.open("get", "https://graph.facebook.com/Trianarra/feed?fields=id&access_token=EAAEAhFsvEQIBANJZBV6yRLBLME1QF9YFDv4WzA0VNOKNXLwhfPAPuDPYC1ODFkipscHp27ilCrvAtOowyvDA6JadKc9VZCGDyDXDST8w3zuA1r4Tvs1eI1TL29B9gKHqeQLlVQMpMT6KtPV5ZBZA8jRmPeKV7k32r7AOabkBAQZDZD");
-	xhr.onload = function () {
-
-	};
-	xhr.send();
-}

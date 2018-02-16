@@ -1,0 +1,60 @@
+@import url(template.css);
+#post-article:not(:checked)~[data-mode=post-article],
+#edit-article:not(:checked)~[data-mode=edit-article] {
+    display: none;
+}
+#article-solitaire+label {
+    float: right;
+}
+#article-solitaire:not(:checked)+label {
+    text-decoration: line-through;
+}
+[data-mode=post-article],
+[data-mode=edit-article] {
+    padding-top: 10px;
+    animation-name: show 0.25s;
+}
+#article-title {
+    width: calc(70% - 10px);
+}
+#article-name {
+    width: calc(30% - 10px - 10px);
+    margin-left: 10px;
+}
+#article-content {
+    height: 100px;
+}
+#article-content:focus {
+    height: 200px;
+}
+#article-note {
+    height: 50px;
+}
+#article-note:focus {
+    height: 100px;
+}
+#article-relate {
+    height: 0px;
+    border-width: 0px;
+    padding: 0px;
+}
+#article-grow:checked~.row #article-relate,
+#article-root:checked~.row #article-relate {
+    height: unset;
+    border-width: 1px;
+    padding: 5px;
+}
+#facebook-logIO {
+    font-size: 20px;
+    float: right;
+    padding: 0px 20px;
+}
+#facebook-logIO:hover {
+    color: #eee;
+    background-color: #4267b2cc;
+}
+@keyframes show {
+    0%{
+        opacity: 0;
+    }
+}
