@@ -35,7 +35,9 @@ header {
 }
 header * {
     height: 100%;
-    float: left;
+    position: absolute;
+    top: 0px;
+    left: 0px;
 }
 header .title {
     font-size: 40px;
