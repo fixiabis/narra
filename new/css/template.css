@@ -114,6 +114,9 @@ label, [type=button] {
     border-width: 1px;
     border-color: transparent;
 }
+label:not([for]) {
+    cursor: default;
+}
 [type=button] {
     padding: 5px 10px;
     border-color: #000;
