@@ -8,7 +8,7 @@ var userId = Cookies.get("userId"),
 	postRelate = document.querySelector("#article-relate"),
 	postSent = document.querySelector("#article-sent"),
 	postSolitaire = document.querySelector("#article-solitaire"),
-	fbLogIO = document.querySelector("#facebook-logIO"),
+	fbLogIOButton = document.querySelectorAll(".facebook-logIO"),
 	editUid = "",
 	editFbid = "",
 	editSerial = "";
@@ -16,12 +16,13 @@ if (userId) fbLogIO.innerHTML = "Logout the account";
 if (userName) document.querySelector("#article-name").value = userName;
 if (solitaire) postSolitaire.checked = solitaire;
 postContent.value = localStorage.getItem("content");
-fbLogIO.onclick = function () {
+function fbLogIO() {
 	if (!userId) {
 		FB.login(function () {
 			userId = FB.getUserID();
 			Cookies.set("userId", userId);
-			fbLogIO.innerHTML = "Logout the account";
+			fbLogIOButton[0].innerHTML = "Logout the account";
+			fbLogIOButton[1].innerHTML = "登出";
 		});
 	} else {
 		Cookies.del("userId");
@@ -30,11 +31,14 @@ fbLogIO.onclick = function () {
 		try {
 			FB.logout(function () {
 				userId = "";
-				fbLogIO.innerHTML = "Login with Facebook";
+				fbLogIOButton[0].innerHTML = "Login with Facebook";
+				fbLogIOButton[1].innerHTML = "登入";
 			});
 		} catch (e) { }
 	}
-};
+}
+for (var i = 0; i < fbLogIOButton.length; i++)
+	fbLogIOButton[i].onclick = fbLogIO;
 document.querySelector("#post-article").onclick = function () {
 	document.querySelector("[data-mode=post-article]").style.display = "";
 }

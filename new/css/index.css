@@ -44,14 +44,20 @@
     border-width: 1px;
     padding: 5px;
 }
-#facebook-logIO {
+.facebook-logIO {
     font-size: 20px;
     float: right;
     padding: 0px 20px;
 }
-#facebook-logIO:hover {
+.facebook-logIO:hover {
     color: #eee;
     background-color: #4267b2cc;
+}
+.facebook-logIO.for-mob {
+    font-size: 16px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
 }
 @keyframes show {
     0%{
