@@ -113,7 +113,7 @@ document.querySelector("#article-sent").onclick = function () {
 		relate = postRelate.value,
 		note = postNote.value,
 		solitaire = postSolitaire.checked,
-		sent = document.querySelector("#sent");
+		sent = document.querySelector("#article-sent");
 	createCover();
 	if (name) Cookies.set("name", name);
 	if (solitaire) Cookies.set("solitaire", solitaire);
