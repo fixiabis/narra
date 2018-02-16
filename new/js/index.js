@@ -12,7 +12,7 @@ var userId = Cookies.get("userId"),
 	editUid = "",
 	editFbid = "",
 	editSerial = "";
-if (userId) fbLogIO.innerHTML = "logout the account";
+if (userId) fbLogIO.innerHTML = "Logout the account";
 if (userName) document.querySelector("#article-name").value = userName;
 if (solitaire) postSolitaire.checked = solitaire;
 postContent.value = localStorage.getItem("content");
@@ -21,13 +21,13 @@ fbLogIO.onclick = function () {
 		FB.login(function () {
 			userId = FB.getUserID();
 			Cookies.set("userId", userId);
-			fbLogIO.innerHTML = "logout";
+			fbLogIO.innerHTML = "Logout the account";
 		});
 	} else {
 		FB.logout(function () {
 			userId = "";
 			Cookies.del("userId");
-			fbLogIO.innerHTML = "login";
+			fbLogIO.innerHTML = "Login with Facebook";
 		});
 	}
 };

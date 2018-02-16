@@ -1,41 +1,40 @@
 var userId = Cookies.get("userId"),
 	userName = Cookies.get("name"),
 	solitaire = JSON.parse(Cookies.get("solitaire")),
-	postTitle = document.querySelector("#post-title"),
-	postName = document.querySelector("#post-name"),
-	postContent = document.querySelector("#post-content"),
-	postNote = document.querySelector("#post-note"),
-	postRelate = document.querySelector("#post-relate"),
-	postSent = document.querySelector("#post-sent"),
-	postType = document.querySelector("#post-type"),
-	postSolitaire = document.querySelector("#post-solitaire"),
-	editUid = document.querySelector("#edit-uid"),
-	editFbid = document.querySelector("#edit-fbid"),
-	editSerial = document.querySelector("#edit-serial");
-if (userId) document.querySelector("#login-to-fb").innerHTML = "logout";
-if (userName) document.querySelector("#post-name").value = userName;
+	postTitle = document.querySelector("#article-title"),
+	postName = document.querySelector("#article-name"),
+	postContent = document.querySelector("#article-content"),
+	postNote = document.querySelector("#article-note"),
+	postRelate = document.querySelector("#article-relate"),
+	postSent = document.querySelector("#article-sent"),
+    postSolitaire = document.querySelector("#article-solitaire"),
+    fbLogIO = document.querySelector("#facebook-logIO"),
+	editUid = "",
+	editFbid = "",
+	editSerial = "";
+if (userId) fbLogIO.innerHTML = "logout the account";
+if (userName) document.querySelector("#article-name").value = userName;
 if (solitaire) postSolitaire.checked = solitaire;
 postContent.value = localStorage.getItem("content");
-document.getElementById("login-to-fb").onclick = function () {
+fbLogIO.onclick = function () {
 	if (!userId) {
 		FB.login(function () {
 			userId = FB.getUserID();
 			Cookies.set("userId", userId);
-			document.querySelector("#login-to-fb").innerHTML = "logout";
+			fbLogIO.innerHTML = "logout the account";
 		});
 	} else {
 		FB.logout(function () {
 			userId = "";
 			Cookies.del("userId");
-			document.querySelector("#login-to-fb").innerHTML = "login";
+			fbLogIO.innerHTML = "login with Facebook";
 		});
 	}
 };
-document.querySelector("#m2").onclick = function () {
-	var elems = [postTitle, postName, postContent, postNote, postSent, postType];
-	for (var i = 0; i < elems.length; i++) elems[i].style.display = "none";
-};
-document.querySelector("#edit-id").onkeyup = function () {
+document.querySelector("#post-article").onclick = function() {
+	document.querySelector("[data-mode=post-article]").style.display = "";
+}
+document.querySelector("#article-id").oninput = function () {
 	var id = this.value.replace("trianarra", "").replace("#", "");
 	if (this.value.search("trianarra") > -1 && id != "" && !isNaN(id)) {
 		id *= 1;
@@ -64,8 +63,7 @@ document.querySelector("#edit-id").onkeyup = function () {
 				editUid.value = uid; resolve();
 			})),
 			new Promise((resolve, reject) => requestData(id, "type", function (type) {
-				var postTypes = document.querySelectorAll("#post-type input");
-				postTypes[(type == "開端") ? 0 : (type == "之後") ? 1 : 2].click();
+				document.querySelector(`article-type [value=${type}]`);
 				resolve();
 			})),
 			new Promise((resolve, reject) => requestData(id, "solitaire", function (solitaire) {
@@ -73,17 +71,12 @@ document.querySelector("#edit-id").onkeyup = function () {
 				resolve();
 			}))
 		]).then(() => {
-			var elems = [postTitle, postName, postContent, postNote, postSent, postType];
-			for (var i = 0; i < elems.length; i++) elems[i].style.display = "";
+			document.querySelector("[data-mode=post-article]").style.display = "block";
 			deleteCover();
 		});
 	}
 }
-document.querySelector("#m1").onclick = function () {
-	var elems = [postTitle, postName, postContent, postNote, postSent, postType];
-	for (var i = 0; i < elems.length; i++) elems[i].style.display = "";
-};
-document.querySelector("#cancel").onclick = function () {
+document.querySelector("#article-cancel").onclick = function () {
 	clearStory();
 };
 postRelate.onkeyup = function () {
@@ -101,12 +94,12 @@ postRelate.onkeyup = function () {
 		}));
 	}
 };
-document.querySelector("#sent").onclick = function () {
+document.querySelector("#article-sent").onclick = function () {
 	var serial = editSerial.value,
 		fbid = editFbid.value,
 		uid = editUid.value,
 		name = postName.value,
-		type = document.querySelector("#post-type input:checked").value,
+		type = document.querySelector("#article-type input:checked").value,
 		title = postTitle.value,
 		content = postContent.value,
 		relate = postRelate.value,
@@ -121,7 +114,7 @@ document.querySelector("#sent").onclick = function () {
 		Cookies.set("userId", userId);
 		sent.click();
 	});
-	else if (document.querySelector("#m2").checked)
+	else if (document.querySelector("#edit-article").checked)
 		storyEdit(userId, serial, fbid, type, title, content, relate, name, note, uid, solitaire);
 	else storyPost(userId, name, type, title, content, relate, note, solitaire);
 };
@@ -136,10 +129,10 @@ window.onbeforeunload = function (event) {
 }
 function clearStory(ok) {
 	if (ok || confirm("確定刪除?")) {
-		document.querySelector("#post-note").value = "";
-		document.querySelector("#post-title").value = "";
-		document.querySelector("#post-content").value = "";
-		document.querySelector("#post-relate").value = "";
+		postNote.value = "";
+		postTitle.value = "";
+		postContent.value = "";
+		postRelate.value = "";
 		localStorage.removeItem("content");
 	}
 }
