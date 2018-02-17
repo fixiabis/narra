@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>trianarra</title>
     <style>
-        @import url(css/index.css);
+        @import url(css/post.css);
     </style>
     <script src="js/cookie.js"></script>
     <script src="js/fbPost.js"></script>
@@ -30,6 +30,7 @@
             <label for="post-article">發表文章</label>
             <input type="radio" id="edit-article" name="mode" />
             <label for="edit-article">編輯文章</label>
+            <label><a href="view.html">瀏覽文章</a></label>
             <div data-mode="edit-article">
                 <input type="text" placeholder="輸入文章id，例：#trianarra0" id="article-id" class="w100"/>
             </div>
@@ -63,7 +64,8 @@
             </div>
         </div>
     </div>
-    <script src="js/index.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/post.js"></script>
     <script>
         window.fbAsyncInit = function () {
             FB.init({

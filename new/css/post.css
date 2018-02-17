@@ -45,9 +45,9 @@
     padding: 5px;
 }
 .facebook-logIO {
+    cursor: pointer;
     font-size: 20px;
-    left: unset;
-    right: 0px;
+    float: right;
     padding: 0px 20px;
 }
 .facebook-logIO:hover {
@@ -56,6 +56,8 @@
 }
 .facebook-logIO.for-mob {
     font-size: 16px;
+    position: absolute;
+    right: 0px;
 }
 @keyframes show {
     0%{

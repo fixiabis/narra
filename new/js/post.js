@@ -42,10 +42,62 @@ function fbLogIO() {
 }
 for (var i = 0; i < fbLogIOButton.length; i++)
 	fbLogIOButton[i].onclick = fbLogIO;
-document.querySelector("#post-article").onclick = function () {
+document.querySelector("#post-article").addEventListener("click", function () {
 	document.querySelector("[data-mode=post-article]").style.display = "";
-}
-document.querySelector("#article-id").oninput = function () {
+});
+document.querySelector("#article-id").addEventListener("input", findArticle);
+document.querySelector("#article-cancel").addEventListener("click", function () {
+	clearStory();
+});
+postRelate.addEventListener("input", function () {
+	var id = this.value.replace("trianarra", "").replace("#", "");
+	if (this.value.search("trianarra") > -1 && id != "" && !isNaN(id)) {
+		new Promise((resolve, reject) => findUid(userId, function (uid) {
+			new Promise((resolve, reject) => requestData(id, "solitaire", function (solitaire) {
+				if (solitaire) resolve();
+				else reject();
+			})).catch(function () {
+				new Promise((resolve, reject) => requestData(id, "uid", function (ruid) {
+					if (uid != ruid) alert("本篇禁止他人接續");
+				}));
+			});
+		}));
+	}
+});
+document.querySelector("#article-sent").addEventListener("click", function () {
+	var serial = editSerial,
+		fbid = editFbid,
+		uid = editUid,
+		name = postName.value,
+		type = document.querySelector("#article-type input:checked").value,
+		title = postTitle.value,
+		content = postContent.value,
+		relate = postRelate.value,
+		note = postNote.value,
+		solitaire = postSolitaire.checked,
+		sent = document.querySelector("#article-sent");
+	createCover();
+	if (name) Cookies.set("name", name);
+	if (solitaire) Cookies.set("solitaire", solitaire);
+	if (!userId) FB.login(function () {
+		userId = FB.getUserID();
+		Cookies.set("userId", userId);
+		sent.click();
+	});
+	else if (document.querySelector("#edit-article").checked)
+		storyEdit(userId, serial, fbid, type, title, content, relate, name, note, uid, solitaire);
+	else storyPost(userId, name, type, title, content, relate, note, solitaire);
+});
+postContent.addEventListener("input", function () {
+	localStorage.setItem("content", this.value);
+});
+window.addEventListener("beforeunload", function (event) {
+	if (postContent.value.length) {
+		event.returnValue = "\o/";
+		return "\o/";
+	}
+});
+function findArticle() {
 	var id = this.value.replace("trianarra", "").replace("#", "");
 	if (this.value.search("trianarra") > -1 && id != "" && !isNaN(id)) {
 		id *= 1;
@@ -85,57 +137,6 @@ document.querySelector("#article-id").oninput = function () {
 			document.querySelector("[data-mode=post-article]").style.display = "block";
 			deleteCover();
 		});
-	}
-}
-document.querySelector("#article-cancel").onclick = function () {
-	clearStory();
-};
-postRelate.onkeyup = function () {
-	var id = this.value.replace("trianarra", "").replace("#", "");
-	if (this.value.search("trianarra") > -1 && id != "" && !isNaN(id)) {
-		new Promise((resolve, reject) => findUid(userId, function (uid) {
-			new Promise((resolve, reject) => requestData(id, "solitaire", function (solitaire) {
-				if (solitaire) resolve();
-				else reject();
-			})).catch(function () {
-				new Promise((resolve, reject) => requestData(id, "uid", function (ruid) {
-					if (uid != ruid) alert("本篇禁止他人接續");
-				}));
-			});
-		}));
-	}
-};
-document.querySelector("#article-sent").onclick = function () {
-	var serial = editSerial,
-		fbid = editFbid,
-		uid = editUid,
-		name = postName.value,
-		type = document.querySelector("#article-type input:checked").value,
-		title = postTitle.value,
-		content = postContent.value,
-		relate = postRelate.value,
-		note = postNote.value,
-		solitaire = postSolitaire.checked,
-		sent = document.querySelector("#article-sent");
-	createCover();
-	if (name) Cookies.set("name", name);
-	if (solitaire) Cookies.set("solitaire", solitaire);
-	if (!userId) FB.login(function () {
-		userId = FB.getUserID();
-		Cookies.set("userId", userId);
-		sent.click();
-	});
-	else if (document.querySelector("#edit-article").checked)
-		storyEdit(userId, serial, fbid, type, title, content, relate, name, note, uid, solitaire);
-	else storyPost(userId, name, type, title, content, relate, note, solitaire);
-};
-postContent.onkeyup = function () {
-	localStorage.setItem("content", this.value);
-}
-window.onbeforeunload = function (event) {
-	if (postContent.value.length) {
-		event.returnValue = "\o/";
-		return "\o/";
 	}
 }
 function clearStory(ok) {
@@ -193,4 +194,10 @@ function findUid(id, when_loaded) {
 		when_loaded(JSON.parse(this.response));
 	};
 	xhr.send();
+}
+var editId = getSearchValue("edit_id");
+if (editId) {
+	document.querySelector("#edit-article").click();
+	document.querySelector("#article-id").value = `trianarra${editId}`;
+	findArticle.bind(document.querySelector("#article-id"))();
 }
