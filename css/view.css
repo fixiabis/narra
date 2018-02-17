@@ -1,4 +1,10 @@
 @import url(template.css);
+* {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
 .button-container *{
     float: right;
 }

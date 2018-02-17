@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>reviewer</title>
+    <style>
+        @import url(css/view.css);
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="title">trianarra</div>
+    </header>
+    <div class="container">
+        <div class="field">
+            歡迎來到trianarra, 一個故事的創作平台, 可在此進行審查文章，
+            <a href="https://docs.google.com/spreadsheets/d/16Vh11gkwUADUR1H2aCvjilVX946327oA1YElYqxkbOk" target="_blank">點此前往</a>審查文章清單
+        </div>
+    </div>
+    <script>
+        function createField(content, id) {
+            if (!content) return;
+            var field = document.createElement("div"),
+                contentContainer = document.createElement("div"),
+                buttonContainer = document.createElement("div"),
+                commentButton = document.createElement("input");
+            field.className = "field";
+            contentContainer.innerHTML = content.replace(/\n/g, "<br>");
+            commentButton.type = "button";
+            commentButton.value = "評論";
+            commentButton.onclick = function () {
+                window.open("https://www.facebook.com/" + id);
+            }
+            buttonContainer.className = "button-container";
+            buttonContainer.appendChild(commentButton);
+            field.appendChild(contentContainer);
+            field.appendChild(buttonContainer);
+            document.querySelector(".container").appendChild(field);
+            if (content.search("#trianus") < 0)
+                commentButton.click();
+        }
+        function getData(url, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("get", url);
+            xhr.onload = function () {
+                var data = JSON.parse(this.response);
+                callback(data);
+            };
+            xhr.send();
+        }
+        function getFbData() {
+            var url = "https://graph.facebook.com/1961795094104661/feed?fields=from,message,comments&limit=10",
+                token = "&access_token=EAAEAhFsvEQIBAFrTHXMYfZBleKjrTUZBZAmyUFyoeraXQxpc7NDZA1fna0ZAHV3PLh1ugec8OLPzgeiAL0FH7vZCoRWfZC1SZCUT9PVX9c10Ldl7PZBECIha4yS3uo9woQAhcVGUQPrn9GRihwp4Urkmmzj9v4CTxIZCbSXx2mDpoO4wZDZD",
+                ignoreConfirm = function (content, id, comments) {
+                    if (comments) {
+                        for (var i = 0; i < comments.data.length; i++)
+                            if (comments.data[i].message.search("#已審") == 0) return;
+                        if (comments.paging && comments.paging.next)
+                            return getData(comments.paging.next, function (data) {
+                                ignoreConfirm(content, id, data);
+                            });
+                    }
+                    return createField(content, id);
+                },
+                fetcher = function (data) {
+                    for (var i = 0; i < data.data.length; i++) {
+                        var d = data.data[i],
+                            id = d.id,
+                            message = d.message,
+                            comments = d.comments;
+                        ignoreConfirm(message, id, comments);
+                    }
+                    if (data.paging && data.paging.next) return getData(data.paging.next, fetcher);
+                };
+            getData(url + token, fetcher);
+        }
+        getFbData();
+    </script>
+</body>
+
+</html>

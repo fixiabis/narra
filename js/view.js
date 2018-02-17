@@ -38,7 +38,10 @@ function createField(content, id) {
     buttonContainer.appendChild(editButton);
     field.appendChild(contentContainer);
     field.appendChild(buttonContainer);
-    document.querySelector(".container").appendChild(field);
+    document.querySelector(".container").insertBefore(
+        field,
+        document.querySelector(".field").nextSibling
+    );
 }
 function getData(url, callback) {
     var xhr = new XMLHttpRequest();

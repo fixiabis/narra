@@ -97,6 +97,9 @@ window.addEventListener("beforeunload", function (event) {
 		return "\o/";
 	}
 });
+document.querySelector("[for=post-article]").addEventListener("click", function() {
+	clearStory(true);
+});
 function findArticle() {
 	var id = this.value.replace("trianarra", "").replace("#", "");
 	if (this.value.search("trianarra") > -1 && id != "" && !isNaN(id)) {
@@ -126,7 +129,7 @@ function findArticle() {
 				editUid = uid; resolve();
 			})),
 			new Promise((resolve, reject) => requestData(id, "type", function (type) {
-				document.querySelector(`article-type [value=${type}]`).checked = true;
+				document.querySelector(`#article-type [value=${type}]`).checked = true;
 				resolve();
 			})),
 			new Promise((resolve, reject) => requestData(id, "solitaire", function (solitaire) {
