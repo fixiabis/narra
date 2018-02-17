@@ -12,7 +12,10 @@ var userId = Cookies.get("userId"),
 	editUid = "",
 	editFbid = "",
 	editSerial = "";
-if (userId) fbLogIO.innerHTML = "Logout the account";
+if (userId) {
+	fbLogIOButton[0].innerHTML = "Logout the account";
+	fbLogIOButton[1].innerHTML = "登出";
+}
 if (userName) document.querySelector("#article-name").value = userName;
 if (solitaire) postSolitaire.checked = solitaire;
 postContent.value = localStorage.getItem("content");
@@ -46,7 +49,7 @@ document.querySelector("#article-id").oninput = function () {
 	var id = this.value.replace("trianarra", "").replace("#", "");
 	if (this.value.search("trianarra") > -1 && id != "" && !isNaN(id)) {
 		id *= 1;
-		editSerial.value = id;
+		editSerial = id;
 		createCover();
 		Promise.all([
 			new Promise((resolve, reject) => requestData(id, "title", function (title) {
@@ -65,10 +68,10 @@ document.querySelector("#article-id").oninput = function () {
 				postNote.value = note; resolve();
 			})),
 			new Promise((resolve, reject) => requestData(id, "id", function (fbid) {
-				editFbid.value = fbid; resolve();
+				editFbid = fbid; resolve();
 			})),
 			new Promise((resolve, reject) => requestData(id, "uid", function (uid) {
-				editUid.value = uid; resolve();
+				editUid = uid; resolve();
 			})),
 			new Promise((resolve, reject) => requestData(id, "type", function (type) {
 				document.querySelector(`article-type [value=${type}]`);
@@ -103,9 +106,9 @@ postRelate.onkeyup = function () {
 	}
 };
 document.querySelector("#article-sent").onclick = function () {
-	var serial = editSerial.value,
-		fbid = editFbid.value,
-		uid = editUid.value,
+	var serial = editSerial,
+		fbid = editFbid,
+		uid = editUid,
 		name = postName.value,
 		type = document.querySelector("#article-type input:checked").value,
 		title = postTitle.value,
