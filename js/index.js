@@ -27,7 +27,7 @@ fbLogIO.onclick = function () {
 		FB.logout(function () {
 			userId = "";
 			Cookies.del("userId");
-			fbLogIO.innerHTML = "login with Facebook";
+			fbLogIO.innerHTML = "login with facebook";
 		});
 	}
 };
