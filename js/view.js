@@ -94,5 +94,6 @@ document.querySelector(".searchButton").addEventListener("click", function() {
     headerSwitch();
 });
 window.addEventListener("resize", function() {
-    headerSwitch(false);
+	if (document.body.clientWidth > 540)
+		headerSwitch(false);
 });

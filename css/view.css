@@ -46,7 +46,7 @@ a.for-mob {
 }
 .for-mob:hover {
     color: #eee;
-    background-color: #4267b2cc;
+    background-color: rgba(66, 103, 178, 0.8);
 }
 @media screen and (max-width: 640px) {
     .search input {
