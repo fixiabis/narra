@@ -126,7 +126,7 @@ function findArticle() {
 				editUid = uid; resolve();
 			})),
 			new Promise((resolve, reject) => requestData(id, "type", function (type) {
-				document.querySelector(`article-type [value=${type}]`);
+				document.querySelector(`article-type [value=${type}]`).checked = true;
 				resolve();
 			})),
 			new Promise((resolve, reject) => requestData(id, "solitaire", function (solitaire) {
