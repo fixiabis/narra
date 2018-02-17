@@ -35,7 +35,7 @@ document.querySelector("#m2").onclick = function () {
 	var elems = [postTitle, postName, postContent, postNote, postSent, postType];
 	for (var i = 0; i < elems.length; i++) elems[i].style.display = "none";
 };
-document.querySelector("#edit-id").onkeyup = function () {
+document.querySelector("#edit-id").oninput = function () {
 	var id = this.value.replace("trianarra", "").replace("#", "");
 	if (this.value.search("trianarra") > -1 && id != "" && !isNaN(id)) {
 		id *= 1;
@@ -86,7 +86,7 @@ document.querySelector("#m1").onclick = function () {
 document.querySelector("#cancel").onclick = function () {
 	clearStory();
 };
-postRelate.onkeyup = function () {
+postRelate.oninput = function () {
 	var id = this.value.replace("trianarra", "").replace("#", "");
 	if (this.value.search("trianarra") > -1 && id != "" && !isNaN(id)) {
 		new Promise((resolve, reject) => findUid(userId, function (uid) {
@@ -125,7 +125,7 @@ document.querySelector("#sent").onclick = function () {
 		storyEdit(userId, serial, fbid, type, title, content, relate, name, note, uid, solitaire);
 	else storyPost(userId, name, type, title, content, relate, note, solitaire);
 };
-postContent.onkeyup = function () {
+postContent.oninput = function () {
 	localStorage.setItem("content", this.value);
 }
 window.onbeforeunload = function (event) {
