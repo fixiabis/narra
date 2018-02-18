@@ -86,8 +86,10 @@ function getFbData() {
             document.querySelector(".loading").innerHTML = `正在載入...(已讀取${loadCount}篇)`;
             if (data.paging && data.paging.next)
                 return getData(data.paging.next, fetcher);
-            else
+            else {
                 document.querySelector(".loading").parentNode.style.display = "none";
+                contentFilter();
+            }
         };
     getData(url + token, fetcher);
 }
@@ -99,6 +101,7 @@ function contentFilter() {
         hideField[i].style.display = "none";
     for (var i = 0; i < showField.length; i++)
         showField[i].style.display = "";
+    console.log(showField);
 }
 function headerSwitch(open) {
     if (open == undefined)
