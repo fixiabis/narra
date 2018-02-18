@@ -14,16 +14,37 @@
 <body>
     <header>
         <div class="title">trianarra</div>
+        <div class="searchButton for-mob">搜尋</div>
+        <a class="for-mob" href="index.html">發文</a>
+        <form class="search">
+            <input type="text" id="search" placeholder="尋找內容" name="content" />
+            <input type="submit" value="搜尋" />
+        </form>
     </header>
     <div class="container">
         <div class="field">
             歡迎來到trianarra, 一個故事的創作平台, 可在此進行審查trianus的文章，
             <a href="https://docs.google.com/spreadsheets/d/16Vh11gkwUADUR1H2aCvjilVX946327oA1YElYqxkbOk" target="_blank">點此前往</a>審查文章清單
         </div>
+        <div class="field">
+            <span class="loading">正在載入...</span>
+        </div>
     </div>
     <script src="js/main.js"></script>
+    <script src="js/view.js"></script>
     <script>
+        var loadCount = 0;
         function createField(content, id) {
+            if (!content) return;
+            var searchContent = "";
+            if (location.search) {
+                searchContent = decodeURI(getSearchValue("content"));
+                if (searchContent)
+                    if (content.search(searchContent) < 0)
+                        content = "";
+                    else
+                        content = content.replace(new RegExp(searchContent, "g"), `<span class="search-content">${searchContent}</span>`);
+            }
             if (!content) return;
             var field = document.createElement("div"),
                 contentContainer = document.createElement("div"),
@@ -40,16 +61,10 @@
             buttonContainer.appendChild(commentButton);
             field.appendChild(contentContainer);
             field.appendChild(buttonContainer);
-            document.querySelector(".container").appendChild(field);
-        }
-        function getData(url, callback) {
-            var xhr = new XMLHttpRequest();
-            xhr.open("get", url);
-            xhr.onload = function () {
-                var data = JSON.parse(this.response);
-                callback(data);
-            };
-            xhr.send();
+            document.querySelector(".container").insertBefore(
+                field,
+                document.querySelector(".loading").parentNode
+            );
         }
         function getFbData() {
             var url = "https://graph.facebook.com/1961795094104661/feed?fields=from,message,comments&limit=10",
@@ -72,8 +87,13 @@
                             message = d.message,
                             comments = d.comments;
                         ignoreConfirm(message, id, comments);
+                        loadCount++;
                     }
-                    if (data.paging && data.paging.next) return getData(data.paging.next, fetcher);
+                    document.querySelector(".loading").innerHTML = `正在載入...(已讀取${loadCount}篇)`;
+                    if (data.paging && data.paging.next)
+                        return getData(data.paging.next, fetcher);
+                    else
+                        document.querySelector(".loading").parentNode.style.display = "none";
                 };
             getData(url + token, fetcher);
         }

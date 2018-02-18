@@ -1,8 +1,13 @@
+var loadCount = 0;
 function createField(content, id) {
-    var trinId = ""
+    if (!content) return;
+    var trinId = "",
+        authorId = "",
+        searchContent = "";
     function contentFormat(content) {
-        var match = content.match(/#trianarra.+ :|#trianarra.+ 之前|#trianarra.+ 之後/g),
-            authorId = content.match(/#trianarra_.+\n/g)[0].replace("\n", "");
+        if (!content) return "";
+        var match = content.match(/#trianarra.+ :|#trianarra.+ 之前|#trianarra.+ 之後/g);
+        authorId = content.match(/#trianarra_.+\n/g)[0].replace("\n", "");
         if (match == null) return "";
         for (var i = 0; i < match.length; i++) {
             var statusMatch = match[i].match(/ 之前| 之後| :/g),
@@ -14,6 +19,14 @@ function createField(content, id) {
             .replace("\n其他作品點此 : #trianarra_各篇開端", "")
             .replace(authorId, `<a href="${authorId}">${authorId}</a>\n`);
     }
+    if (location.search) {
+        searchContent = decodeURI(getSearchValue("content"));
+        if (searchContent)
+            if (content.search(searchContent) < 0)
+                content = "";
+            else
+                content = content.replace(new RegExp(searchContent, "g"), `<span class="search-content">${searchContent}</span>`);
+    }
     content = contentFormat(content);
     if (!content) return;
     var field = document.createElement("div"),
@@ -22,6 +35,7 @@ function createField(content, id) {
         commentButton = document.createElement("input"),
         editButton = document.createElement("input");
     field.className = "field";
+    field.setAttribute("data-search", `trianarra${trinId} ${authorId.replace("#", "")}`);
     contentContainer.innerHTML = content.replace(/\n/g, "<br/>");
     editButton.value = "編輯";
     editButton.type = "button";
@@ -40,7 +54,7 @@ function createField(content, id) {
     field.appendChild(buttonContainer);
     document.querySelector(".container").insertBefore(
         field,
-        document.querySelector(".field").nextSibling
+        document.querySelector(".loading").parentNode
     );
 }
 function getData(url, callback) {
@@ -63,26 +77,23 @@ function getFbData() {
                     comments = d.comments;
                 createField(message, id);
             }
+            document.querySelector(".loading").innerHTML = `正在載入...(已讀取${loadCount}篇)`;
             if (data.paging && data.paging.next)
                 return getData(data.paging.next, fetcher);
-            else {
-                if (location.hash) contentFilter();
-                if (location.search)
-                    showField(decodeURI(getSearchValue("content")));
-            }
+            else
+                document.querySelector(".loading").parentNode.style.display = "none";
         };
     getData(url + token, fetcher);
 }
-getFbData();
-function showField(searchContent) {
-    var fieldContent = document.querySelectorAll(".field div:first-child");
-    for (var i = 0; i < fieldContent.length; i++) {
-        fieldContent[i].parentNode.style.display =
-            fieldContent[i].innerHTML.indexOf(searchContent) > -1 ? "" : "none";
-    }
-}
 function contentFilter() {
-    showField(location.hash);
+    var showFieldRule = `[data-search~=${location.hash.replace("#", "")}]`,
+        showField = document.querySelectorAll(showFieldRule),
+        hideField = document.querySelectorAll(`.field:not(${showFieldRule})`);
+    for (var i = 1; i < hideField.length; i++)
+        hideField[i].style.display = "none";
+    for (var i = 0; i < showField.length; i++)
+        showField[i].style.display = "";
+    console.log(showFieldRule);
 }
 function headerSwitch(open) {
     if (open == undefined)
@@ -90,10 +101,10 @@ function headerSwitch(open) {
     document.querySelector("header").style.height = open ? "100px" : "";
 }
 window.addEventListener("hashchange", contentFilter);
-document.querySelector(".searchButton").addEventListener("click", function() {
+document.querySelector(".searchButton").addEventListener("click", function () {
     headerSwitch();
 });
-window.addEventListener("resize", function() {
-	if (document.body.clientWidth > 540)
-		headerSwitch(false);
+window.addEventListener("resize", function () {
+    if (document.body.clientWidth > 540)
+        headerSwitch(false);
 });

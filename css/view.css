@@ -48,6 +48,12 @@ a.for-mob {
     color: #eee;
     background-color: rgba(66, 103, 178, 0.8);
 }
+.search-content {
+    color:red;
+}
+.loading {
+    animation: show 1s infinite;
+}
 @media screen and (max-width: 640px) {
     .search input {
         color: #eee;
