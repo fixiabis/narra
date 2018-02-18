@@ -142,7 +142,6 @@ function findArticle() {
 					deleteCover();
 				});
 			}).catch(function(){
-				alert("非原作者");
 				deleteCover();
 			});
 		}
