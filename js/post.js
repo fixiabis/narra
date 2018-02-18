@@ -142,6 +142,7 @@ function findArticle() {
 					deleteCover();
 				});
 			}).catch(function(){
+				alert("非原作者");
 				deleteCover();
 			});
 		}
@@ -149,6 +150,7 @@ function findArticle() {
 		editSerial = id;
 		createCover();
 		if (!userId) fbLogIO(fetchArticle);
+		else fetchArticle();
 	}
 }
 function clearStory(ok) {
