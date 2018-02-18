@@ -33,7 +33,8 @@ function createField(content, id) {
         contentContainer = document.createElement("div"),
         buttonContainer = document.createElement("div"),
         commentButton = document.createElement("input"),
-        editButton = document.createElement("input");
+        editButton = document.createElement("input"),
+        relateButton = document.createElement("input");
     field.className = "field";
     field.setAttribute("data-search", `trianarra${trinId} ${authorId.replace("#", "")}`);
     contentContainer.innerHTML = content.replace(/\n/g, "<br/>");
@@ -41,6 +42,11 @@ function createField(content, id) {
     editButton.type = "button";
     editButton.onclick = function () {
         window.open(`post.html?edit_id=${trinId}`);
+    };
+    relateButton.value = "接續";
+    relateButton.type = "button";
+    relateButton.onclick = function() {
+        window.open(`post.html?relate_id=${trinId}`);
     };
     commentButton.value = "留言";
     commentButton.type = "button";
@@ -50,6 +56,7 @@ function createField(content, id) {
     buttonContainer.className = "button-container";
     buttonContainer.appendChild(commentButton);
     buttonContainer.appendChild(editButton);
+    buttonContainer.appendChild(relateButton);
     field.appendChild(contentContainer);
     field.appendChild(buttonContainer);
     document.querySelector(".container").insertBefore(

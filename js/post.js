@@ -52,21 +52,7 @@ document.querySelector("#article-id").addEventListener("input", findArticle);
 document.querySelector("#article-cancel").addEventListener("click", function () {
 	clearStory();
 });
-postRelate.addEventListener("input", function () {
-	var id = this.value.replace("trianarra", "").replace("#", "");
-	if (this.value.search("trianarra") > -1 && id != "" && !isNaN(id)) {
-		new Promise((resolve, reject) => findUid(userId, function (uid) {
-			new Promise((resolve, reject) => requestData(id, "solitaire", function (solitaire) {
-				if (solitaire) resolve();
-				else reject();
-			})).catch(function () {
-				new Promise((resolve, reject) => requestData(id, "uid", function (ruid) {
-					if (uid != ruid) alert("本篇禁止他人接續");
-				}));
-			});
-		}));
-	}
-});
+postRelate.addEventListener("input", relateArticle);
 document.querySelector("#article-sent").addEventListener("click", function () {
 	var serial = editSerial,
 		fbid = editFbid,
@@ -152,6 +138,21 @@ function findArticle() {
 		else fetchArticle();
 	}
 }
+function relateArticle() {
+	var id = this.value.replace("trianarra", "").replace("#", "");
+	if (this.value.search("trianarra") > -1 && id != "" && !isNaN(id)) {
+		new Promise((resolve, reject) => findUid(userId, function (uid) {
+			new Promise((resolve, reject) => requestData(id, "solitaire", function (solitaire) {
+				if (solitaire) resolve();
+				else reject();
+			})).catch(function () {
+				new Promise((resolve, reject) => requestData(id, "uid", function (ruid) {
+					if (uid != ruid) alert("本篇禁止他人接續");
+				}));
+			});
+		}));
+	}
+}
 function clearStory(ok) {
 	if (ok || confirm("確定刪除?")) {
 		postNote.value = "";
@@ -216,9 +217,15 @@ function findUid(id, when_loaded) {
 	};
 	xhr.send();
 }
-var editId = getSearchValue("edit_id");
+var editId = getSearchValue("edit_id"),
+	relateId = getSearchValue("relate_id");
 if (editId) {
-	document.querySelector("#edit-article").click();
+	document.querySelector("#edit-article").checked = true;
 	document.querySelector("#article-id").value = `trianarra${editId}`;
 	findArticle.bind(document.querySelector("#article-id"))();
+}
+if (relateId) {
+	document.querySelector("#article-relate").value = `trianarra${relateId}`;
+	document.querySelector("#article-grow").checked = true;
+	relateArticle.bind(document.querySelector("#article-relate"))();
 }
