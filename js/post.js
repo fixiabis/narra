@@ -104,9 +104,9 @@ function findArticle() {
 	if (this.value.search("trianarra") > -1 && id != "" && !isNaN(id)) {
 		function fetchArticle() {
 			new Promise((resolve, reject) => requestData(id, "uid", function (uid) {
-				isAuthor(userId, function (uid) {
-					if (uid == null) reject();
-					else resolve(uid);
+				isAuthor(userId, function (cpUid) {
+					if (cpUid == null) reject();
+					else if (uid == cpUid)resolve(uid);
 				});
 			})).then(function (uid) {
 				editUid = uid;
