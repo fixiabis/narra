@@ -67,14 +67,13 @@ function getData(url, callback) {
     xhr.send();
 }
 function getFbData() {
-    var url = "https://graph.facebook.com/trianarra/feed?fields=from,message,comments&limit=10",
+    var url = "https://graph.facebook.com/trianarra/feed?fields=from,message&limit=10",
         token = "&access_token=EAAEAhFsvEQIBAFrTHXMYfZBleKjrTUZBZAmyUFyoeraXQxpc7NDZA1fna0ZAHV3PLh1ugec8OLPzgeiAL0FH7vZCoRWfZC1SZCUT9PVX9c10Ldl7PZBECIha4yS3uo9woQAhcVGUQPrn9GRihwp4Urkmmzj9v4CTxIZCbSXx2mDpoO4wZDZD",
         fetcher = function (data) {
             for (var i = 0; i < data.data.length; i++) {
                 var d = data.data[i],
                     id = d.id,
-                    message = d.message,
-                    comments = d.comments;
+                    message = d.message;
                 createField(message, id);
             }
             document.querySelector(".loading").innerHTML = `正在載入...(已讀取${loadCount}篇)`;
