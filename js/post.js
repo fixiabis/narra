@@ -19,13 +19,14 @@ if (userId) {
 if (userName) document.querySelector("#article-name").value = userName;
 if (solitaire) postSolitaire.checked = solitaire;
 postContent.value = localStorage.getItem("content");
-function fbLogIO() {
+function fbLogIO(when_complete) {
 	if (!userId) {
 		FB.login(function () {
 			userId = FB.getUserID();
 			Cookies.set("userId", userId);
 			fbLogIOButton[0].innerHTML = "Logout the account";
 			fbLogIOButton[1].innerHTML = "登出";
+			when_complete();
 		});
 	} else {
 		Cookies.del("userId");
@@ -40,7 +41,6 @@ function fbLogIO() {
 			FB.logout(afterLogout);
 		else
 			afterLogout();
-
 	}
 }
 for (var i = 0; i < fbLogIOButton.length; i++)
@@ -82,11 +82,7 @@ document.querySelector("#article-sent").addEventListener("click", function () {
 	createCover();
 	if (name) Cookies.set("name", name);
 	if (solitaire) Cookies.set("solitaire", solitaire);
-	if (!userId) FB.login(function () {
-		userId = FB.getUserID();
-		Cookies.set("userId", userId);
-		sent.click();
-	});
+	if (!userId) fbLogIO(_ => sent.click());
 	else if (document.querySelector("#edit-article").checked)
 		storyEdit(userId, serial, fbid, type, title, content, relate, name, note, uid, solitaire);
 	else storyPost(userId, name, type, title, content, relate, note, solitaire);
@@ -106,43 +102,53 @@ document.querySelector("[for=post-article]").addEventListener("click", function 
 function findArticle() {
 	var id = this.value.replace("trianarra", "").replace("#", "");
 	if (this.value.search("trianarra") > -1 && id != "" && !isNaN(id)) {
+		function fetchArticle() {
+			new Promise((resolve, reject) => requestData(id, "uid", function (uid) {
+				isAuthor(userId, function (uid) {
+					if (uid == null) reject();
+					else resolve(uid);
+				});
+			})).then(function (uid) {
+				editUid = uid;
+				Promise.all([
+					new Promise((resolve, reject) => requestData(id, "title", function (title) {
+						postTitle.value = title; resolve();
+					})),
+					new Promise((resolve, reject) => requestData(id, "content", function (content) {
+						postContent.value = content; resolve();
+					})),
+					new Promise((resolve, reject) => requestData(id, "name", function (name) {
+						postName.value = name; resolve();
+					})),
+					new Promise((resolve, reject) => requestData(id, "relate", function (relate) {
+						postRelate.value = relate; resolve();
+					})),
+					new Promise((resolve, reject) => requestData(id, "note", function (note) {
+						postNote.value = note; resolve();
+					})),
+					new Promise((resolve, reject) => requestData(id, "id", function (fbid) {
+						editFbid = fbid; resolve();
+					})),
+					new Promise((resolve, reject) => requestData(id, "type", function (type) {
+						document.querySelector(`#article-type [value=${type}]`).checked = true;
+						resolve();
+					})),
+					new Promise((resolve, reject) => requestData(id, "solitaire", function (solitaire) {
+						postSolitaire.checked = JSON.parse(solitaire);
+						resolve();
+					}))
+				]).then(() => {
+					document.querySelector("[data-mode=post-article]").style.display = "block";
+					deleteCover();
+				});
+			}).catch(function(){
+				deleteCover();
+			});
+		}
 		id *= 1;
 		editSerial = id;
 		createCover();
-		Promise.all([
-			new Promise((resolve, reject) => requestData(id, "title", function (title) {
-				postTitle.value = title; resolve();
-			})),
-			new Promise((resolve, reject) => requestData(id, "content", function (content) {
-				postContent.value = content; resolve();
-			})),
-			new Promise((resolve, reject) => requestData(id, "name", function (name) {
-				postName.value = name; resolve();
-			})),
-			new Promise((resolve, reject) => requestData(id, "relate", function (relate) {
-				postRelate.value = relate; resolve();
-			})),
-			new Promise((resolve, reject) => requestData(id, "note", function (note) {
-				postNote.value = note; resolve();
-			})),
-			new Promise((resolve, reject) => requestData(id, "id", function (fbid) {
-				editFbid = fbid; resolve();
-			})),
-			new Promise((resolve, reject) => requestData(id, "uid", function (uid) {
-				editUid = uid; resolve();
-			})),
-			new Promise((resolve, reject) => requestData(id, "type", function (type) {
-				document.querySelector(`#article-type [value=${type}]`).checked = true;
-				resolve();
-			})),
-			new Promise((resolve, reject) => requestData(id, "solitaire", function (solitaire) {
-				postSolitaire.checked = JSON.parse(solitaire);
-				resolve();
-			}))
-		]).then(() => {
-			document.querySelector("[data-mode=post-article]").style.display = "block";
-			deleteCover();
-		});
+		if (!userId) fbLogIO(fetchArticle);
 	}
 }
 function clearStory(ok) {
@@ -188,6 +194,14 @@ function storyPost(userId, name, type, title, content, relate, note, solitaire) 
 function requestData(id, type, when_loaded) {
 	var xhr = new XMLHttpRequest();
 	xhr.open("get", "https://storee-cfab1.firebaseio.com/posts/" + id + "/" + type + ".json");
+	xhr.onload = function () {
+		when_loaded(JSON.parse(this.response));
+	};
+	xhr.send();
+}
+function isAuthor(id, when_loaded) {
+	var xhr = new XMLHttpRequest();
+	xhr.open("get", "https://storee-cfab1.firebaseio.com/users/" + id + ".json");
 	xhr.onload = function () {
 		when_loaded(JSON.parse(this.response));
 	};
