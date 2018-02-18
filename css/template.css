@@ -79,6 +79,8 @@ header .title {
 	animation: show 1s infinite;
 }
 .field {
+    word-spacing: 5px;
+    line-height: 28px;
     background-color: rgba(238, 238, 238, 0.6);
     width: 800px;
     padding: 10px;
