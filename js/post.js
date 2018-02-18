@@ -167,12 +167,12 @@ function clearStory(ok) {
 }
 function storyEdit(userId, serial, id, type, title, content, relate, name, note, uid, solitaire) {
 	updateToFb(userId, serial, id, type, title, content, relate, name, note, uid, solitaire, function () {
+		deleteCover();
 		if (this.response.search("發送完成") > -1) {
 			clearStory(1);
 			if (confirm("是否開啟文章?"))
 				window.open("https://facebook.com/" + this.response.replace("發送完成,id為", ""));
 		} else alert(this.response);
-		deleteCover();
 	});
 }
 function createCover() {
@@ -188,12 +188,12 @@ function deleteCover() {
 }
 function storyPost(userId, name, type, title, content, relate, note, solitaire) {
 	postToFb(userId, name, type, title, content, relate, note, solitaire, function () {
+		deleteCover();
 		if (this.response.search("發送完成") > -1) {
 			clearStory(1);
 			if (confirm("是否開啟文章?"))
 				window.open("https://facebook.com/" + this.response.replace("發送完成,id為", ""));
 		} else alert(this.response);
-		deleteCover();
 	});
 }
 function requestData(id, type, when_loaded) {
