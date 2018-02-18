@@ -147,7 +147,10 @@ function relateArticle() {
 				else reject();
 			})).catch(function () {
 				new Promise((resolve, reject) => requestData(id, "uid", function (ruid) {
-					if (uid != ruid) alert("本篇禁止他人接續");
+					if (uid != ruid) {
+						alert("本篇禁止他人接續");
+						this.value = "trianarra";
+					}
 				}));
 			});
 		}));
