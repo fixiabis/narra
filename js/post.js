@@ -36,11 +36,11 @@ function fbLogIO() {
 			fbLogIOButton[0].innerHTML = "Login with Facebook";
 			fbLogIOButton[1].innerHTML = "登入";
 		}
-		try {
+		if (FB.getAccessToken())
 			FB.logout(afterLogout);
-		} catch (e) {
+		else
 			afterLogout();
-		}
+
 	}
 }
 for (var i = 0; i < fbLogIOButton.length; i++)
