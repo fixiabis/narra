@@ -31,13 +31,16 @@ function fbLogIO() {
 		Cookies.del("userId");
 		Cookies.del("name");
 		clearStory(true);
+		function afterLogout() {
+			userId = "";
+			fbLogIOButton[0].innerHTML = "Login with Facebook";
+			fbLogIOButton[1].innerHTML = "登入";
+		}
 		try {
-			FB.logout(function () {
-				userId = "";
-				fbLogIOButton[0].innerHTML = "Login with Facebook";
-				fbLogIOButton[1].innerHTML = "登入";
-			});
-		} catch (e) { }
+			FB.logout(afterLogout);
+		} catch (e) {
+			afterLogout();
+		}
 	}
 }
 for (var i = 0; i < fbLogIOButton.length; i++)
@@ -97,7 +100,7 @@ window.addEventListener("beforeunload", function (event) {
 		return "\o/";
 	}
 });
-document.querySelector("[for=post-article]").addEventListener("click", function() {
+document.querySelector("[for=post-article]").addEventListener("click", function () {
 	clearStory(true);
 });
 function findArticle() {

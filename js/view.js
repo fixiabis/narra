@@ -93,7 +93,6 @@ function contentFilter() {
         hideField[i].style.display = "none";
     for (var i = 0; i < showField.length; i++)
         showField[i].style.display = "";
-    console.log(showFieldRule);
 }
 function headerSwitch(open) {
     if (open == undefined)
