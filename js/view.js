@@ -45,7 +45,7 @@ function createField(content, id) {
     };
     relateButton.value = "接續";
     relateButton.type = "button";
-    relateButton.onclick = function() {
+    relateButton.onclick = function () {
         window.open(`post.html?relate_id=${trinId}`);
     };
     commentButton.value = "留言";
@@ -88,7 +88,8 @@ function getFbData() {
                 return getData(data.paging.next, fetcher);
             else {
                 document.querySelector(".loading").parentNode.style.display = "none";
-                contentFilter();
+                if (location.hash)
+                    contentFilter();
             }
         };
     getData(url + token, fetcher);
