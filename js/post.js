@@ -92,7 +92,7 @@ function findArticle() {
 			new Promise((resolve, reject) => requestData(id, "uid", function (uid) {
 				isAuthor(userId, function (cpUid) {
 					if (cpUid == null) reject();
-					else if (uid == cpUid)resolve(uid);
+					else if (uid == cpUid) resolve(uid);
 				});
 			})).then(function (uid) {
 				editUid = uid;
@@ -127,7 +127,7 @@ function findArticle() {
 					document.querySelector("[data-mode=post-article]").style.display = "block";
 					deleteCover();
 				});
-			}).catch(function(){
+			}).catch(function () {
 				deleteCover();
 			});
 		}
@@ -220,15 +220,17 @@ function findUid(id, when_loaded) {
 	};
 	xhr.send();
 }
-var editId = getSearchValue("edit_id"),
-	relateId = getSearchValue("relate_id");
-if (editId) {
-	document.querySelector("#edit-article").checked = true;
-	document.querySelector("#article-id").value = `trianarra${editId}`;
-	findArticle.bind(document.querySelector("#article-id"))();
-}
-if (relateId) {
-	document.querySelector("#article-relate").value = `trianarra${relateId}`;
-	document.querySelector("#article-grow").checked = true;
-	relateArticle.bind(document.querySelector("#article-relate"))();
-}
+document.addEventListener("DOMContentLoaded", function () {
+	var editId = getSearchValue("edit_id"),
+		relateId = getSearchValue("relate_id");
+	if (editId) {
+		document.querySelector("#edit-article").checked = true;
+		document.querySelector("#article-id").value = `trianarra${editId}`;
+		findArticle.bind(document.querySelector("#article-id"))();
+	}
+	if (relateId) {
+		document.querySelector("#article-relate").value = `trianarra${relateId}`;
+		document.querySelector("#article-grow").checked = true;
+		relateArticle.bind(document.querySelector("#article-relate"))();
+	}
+});
