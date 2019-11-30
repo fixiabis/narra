@@ -5,12 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="preload" href="./font/NotoSansCJKtc-Thin.otf" as="font" type="font/otf">
+    <link rel="preload" href="./font/OpenSans-Light.ttf" as="font" type="font/ttf">
     <title>trianarra</title>
     <style>
-        @import url(css/post.css);
+        @import url(./css/post.css);
     </style>
-    <script src="js/cookie.js"></script>
-    <script src="js/fbPost.js"></script>
+    <script src="./js/cookie.js"></script>
+    <script src="./js/fbPost.js"></script>
 </head>
 
 <body>
@@ -25,8 +27,8 @@
             <label for="post-article">發表文章</label>
             <input type="radio" id="edit-article" name="mode" />
             <label for="edit-article">編輯文章</label>
-            <label><a href="view.html">瀏覽文章</a></label>
-            <label><a href="terms.html">使用規定</a></label>
+            <label><a href="./view.html">瀏覽文章</a></label>
+            <label><a href="./terms.html">使用規定</a></label>
             <div data-mode="edit-article">
                 <input type="text" placeholder="輸入文章id，例：#trianarra0" id="article-id" class="w100"/>
             </div>
@@ -69,6 +71,7 @@
                 version: 'v2.11'
             });
             FB.AppEvents.logPageView();
+            postInit();
         };
         (function (d, s, id) {
             var js, fjs = d.getElementsByTagName(s)[0];

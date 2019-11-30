@@ -75,7 +75,7 @@ function getData(url, callback) {
 }
 function getFbData() {
     var url = "https://graph.facebook.com/trianarra/feed?fields=from,message&limit=10",
-        token = "&access_token=EAAEAhFsvEQIBAFrTHXMYfZBleKjrTUZBZAmyUFyoeraXQxpc7NDZA1fna0ZAHV3PLh1ugec8OLPzgeiAL0FH7vZCoRWfZC1SZCUT9PVX9c10Ldl7PZBECIha4yS3uo9woQAhcVGUQPrn9GRihwp4Urkmmzj9v4CTxIZCbSXx2mDpoO4wZDZD",
+        token = "&access_token=EAAC4RJxXw7EBAN3ZCG3vU88XY49EMqsCCEO0JeNMUKoSccaJ6OPiQPJu6WtY0SJ70cHZBhAqvmhL2WO27LBDKE7ZB91QAnuJqDsEf4ltMbI2p2pahM4t94yW2hubxeGz6GF3fLJGZCZCPdor9sULEseWuBwtYEamS1GCZCHzXB0AZDZD",
         fetcher = function (data) {
             for (var i = 0; i < data.data.length; i++) {
                 var d = data.data[i],

@@ -220,7 +220,7 @@ function findUid(id, when_loaded) {
 	};
 	xhr.send();
 }
-document.addEventListener("DOMContentLoaded", function () {
+function postInit() {
 	var editId = getSearchValue("edit_id"),
 		relateId = getSearchValue("relate_id");
 	if (editId) {
@@ -233,4 +233,4 @@ document.addEventListener("DOMContentLoaded", function () {
 		document.querySelector("#article-grow").checked = true;
 		relateArticle.bind(document.querySelector("#article-relate"))();
 	}
-});
+}
